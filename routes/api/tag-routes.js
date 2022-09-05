@@ -1,28 +1,63 @@
-const router = require('express').Router();
-const { Tag, Product, ProductTag } = require('../../models');
+const router = require("express").Router();
+const { Tag, Product, ProductTag } = require("../../models");
 
 // The `/api/tags` endpoint
 
-router.get('/', (req, res) => {
-  // find all tags
-  // be sure to include its associated Product data
+// Find all tags
+router.get("/", async (req, res, next) => {
+  try {
+    const tags = await Tag.findAll({ include: [{ model: Product, as: "products" }] });
+    res.json(tags);
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.get('/:id', (req, res) => {
-  // find a single tag by its `id`
-  // be sure to include its associated Product data
+// Find a single tag by its `id`
+router.get("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const tag = await Tag.findByPk(id, { include: { model: Product, as: "products" } });
+    // Return 'bad request' if tag does not exist
+    if (!tag) return res.sendStatus(400);
+    res.json(tag);
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.post('/', (req, res) => {
-  // create a new tag
+// Create a new tag
+router.post("/", async (req, res, next) => {
+  try {
+    const newTag = await Tag.create(req.body);
+    res.json(newTag);
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.put('/:id', (req, res) => {
-  // update a tag's name by its `id` value
+// Update a tag's name by its `id` value
+router.put("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await Tag.update(req.body, { where: { id } });
+    if (result[0] < 1) return res.sendStatus(400);
+    res.sendStatus(200);
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.delete('/:id', (req, res) => {
-  // delete on tag by its `id` value
+// Delete on tag by its `id` value
+router.delete("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await Tag.destroy({ where: { id } });
+    if (result < 1) return res.sendStatus(400);
+    res.sendStatus(200);
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;
