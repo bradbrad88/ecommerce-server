@@ -1,7 +1,7 @@
 {
-  "name": "module-13-challenge-orm",
+  "name": "ecommerce-backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "E-commerce server exposing API routes for CRUD operations on application database.",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@work.github.com:coding-boot-camp/module-13-challenge-orm.git"
+    "url": "git@github.com:bradbrad88/ecommerce-server.git"
   },
   "keywords": [],
   "author": "",
