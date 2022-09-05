@@ -13,7 +13,14 @@ const sequelize = process.env.JAWSDB_URL
     });
 
 (async () => {
-  console.log(await sequelize.query("select 1 + 1;"));
+  try {
+    const { connect } = await sequelize.query("select 1 + 1 as connect;", { plain: true });
+    console.log(
+      connect === 2 ? "Successfully connected to database!" : "Failed to connect database"
+    );
+  } catch (error) {
+    console.log("Failed to connect database", error);
+  }
 })();
 
 module.exports = sequelize;
